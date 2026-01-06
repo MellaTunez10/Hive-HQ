@@ -1,2 +1,4 @@
 /src/HiveHQ.API/appsettings.json
-./.idea
+# JetBrains Rider / IntelliJ settings
+.idea/
+*.sln.iml
