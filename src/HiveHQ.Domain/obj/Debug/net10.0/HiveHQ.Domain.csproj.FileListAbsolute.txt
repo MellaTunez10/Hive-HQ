@@ -1,0 +1,11 @@
+/home/tunez/projects/Hive-HQ/src/HiveHQ.Domain/obj/Debug/net10.0/HiveHQ.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/home/tunez/projects/Hive-HQ/src/HiveHQ.Domain/obj/Debug/net10.0/HiveHQ.Domain.AssemblyInfoInputs.cache
+/home/tunez/projects/Hive-HQ/src/HiveHQ.Domain/obj/Debug/net10.0/HiveHQ.Domain.AssemblyInfo.cs
+/home/tunez/projects/Hive-HQ/src/HiveHQ.Domain/obj/Debug/net10.0/HiveHQ.Domain.csproj.CoreCompileInputs.cache
+/home/tunez/projects/Hive-HQ/src/HiveHQ.Domain/bin/Debug/net10.0/HiveHQ.Domain.deps.json
+/home/tunez/projects/Hive-HQ/src/HiveHQ.Domain/bin/Debug/net10.0/HiveHQ.Domain.dll
+/home/tunez/projects/Hive-HQ/src/HiveHQ.Domain/bin/Debug/net10.0/HiveHQ.Domain.pdb
+/home/tunez/projects/Hive-HQ/src/HiveHQ.Domain/obj/Debug/net10.0/HiveHQ.Domain.dll
+/home/tunez/projects/Hive-HQ/src/HiveHQ.Domain/obj/Debug/net10.0/refint/HiveHQ.Domain.dll
+/home/tunez/projects/Hive-HQ/src/HiveHQ.Domain/obj/Debug/net10.0/HiveHQ.Domain.pdb
+/home/tunez/projects/Hive-HQ/src/HiveHQ.Domain/obj/Debug/net10.0/ref/HiveHQ.Domain.dll

@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/HiveHQ.API/HiveHQ.API.csproj" />
+    <Project Path="src/HiveHQ.Application/HiveHQ.Application.csproj" />
+    <Project Path="src/HiveHQ.Domain/HiveHQ.Domain.csproj" />
+    <Project Path="src/HiveHQ.Infrastructure/HiveHQ.Infrastructure.csproj" />
+  </Folder>
+</Solution>
