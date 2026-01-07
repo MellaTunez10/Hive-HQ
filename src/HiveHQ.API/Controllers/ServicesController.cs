@@ -1,10 +1,12 @@
-using HiveHQ.Application.Interfaces;
+using HiveHQ.Domain.Interfaces;
 using HiveHQ.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc; // This is the crucial one for ControllerBase and HttpGet
 using AutoMapper;
 using HiveHQ.Application.DTOs;
 
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class ServicesController : ControllerBase
@@ -19,6 +21,7 @@ public class ServicesController : ControllerBase
     }
 
     [HttpGet]
+    [AllowAnonymous] // Anyone can see the list of services!
     public async Task<ActionResult<IReadOnlyList<BusinessService>>> GetServices()
     {
         var services = await _repo.GetAllAsync();

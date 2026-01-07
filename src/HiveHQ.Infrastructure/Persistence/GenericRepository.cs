@@ -1,4 +1,4 @@
-using HiveHQ.Application.Interfaces;
+using HiveHQ.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace HiveHQ.Infrastructure.Persistence;
@@ -11,7 +11,16 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         _context = context;
     }
+    public void Update(T entity)
+    {
+        _context.Set<T>().Attach(entity);
+        _context.Entry(entity).State = EntityState.Modified;
+    }
 
+    public void Delete(T entity)
+    {
+        _context.Set<T>().Remove(entity);
+    }
     public async Task<T?> GetByIdAsync(Guid id) => await _context.Set<T>().FindAsync(id);
 
     public async Task<IReadOnlyList<T>> GetAllAsync() => await _context.Set<T>().ToListAsync();

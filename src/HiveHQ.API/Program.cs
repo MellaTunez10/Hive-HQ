@@ -1,10 +1,11 @@
-using HiveHQ.Application.Interfaces;
+using HiveHQ.Domain.Interfaces;
 using HiveHQ.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation;
 using HiveHQ.Application.Validators;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using HiveHQ.Application.Mappings;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 
 builder.Services.AddControllers();
+
+// Setup Identity to use our Postgres DB
+builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddAuthorization();
 
 // Register the Database Context for PostgreSQL
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -24,6 +31,9 @@ builder.Services.AddValidatorsFromAssemblyContaining<BusinessServiceValidator>()
 
 // Enable automatic validation (returns 400 Bad Request if validation fails)
 builder.Services.AddFluentValidationAutoValidation();
+
+// Register the Generic Repository
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 //Register AutoMapper
 builder.Services.AddAutoMapper(cfg =>
@@ -43,6 +53,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapIdentityApi<IdentityUser>(); // This creates /register and /login endpoints automatically!
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

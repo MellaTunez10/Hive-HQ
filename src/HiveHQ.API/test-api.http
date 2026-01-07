@@ -1,24 +1,54 @@
-### Get all services
-GET https://localhost:7250/api/Services
-
-### Create a new service
-POST https://localhost:7250/api/Services
+### 1. Login first to get the session cookie
+POST https://localhost:7250/login
 Content-Type: application/json
 
 {
-  "name": "Graphic Design",
-  "description": "Logo and branding services",
-  "price": 150.00,
-  "isAvailable": true
+    "email": "admin@codehive.com",
+    "password": "Password123!"
 }
 
-### Separator is required above!
-POST https://localhost:7250/api/services
+### Create a staff
+POST https://localhost:7250/api/staff
+Authorization: Bearer CfDJ8JSGQ0D973hAhmmfQIwPnZzxnCraLmjCaZ0M6QKedMCGf6Dptcka4-6f3XaBXGzF_VFMyzXubPzY_5YfsoL2oi1sYixz_uI5JFHA9WMuWsZ2T59cA4sg6svcWGCdP2FY2p0_8e4Y_ZWh5BubfN4JYOfJLzFzZYHgWrjlX-T7ypYDy7yA9BHQuF3TZUMpicpCWG2eMreZeXFu_-JXDpUA1TYrd2hNI5gZ4qh9Z3LHGxA-O904TC4Inw0PMmb_DQiRPDuHgpOkYvWrqQjSMLav-02hSn3SsVrgzvq4VAIKY2wyp8hBgyckXVwdCWIr3PIHVl3yA6dO8_E6nwBGFv43z94UZaZgX-Ob4TNhGrTdTnNHsj7wCx7Nbs8Z6I87iFo51rCLct89gXqrESa310gZ9VuQ3wfOUwsSc5mQM8xbOtVu4-VXwGGpECSuHVwXnRaVNpV0sE3MLz3tZV8kskPYxXbMadJt--nO8MizEKUKcOCdx8CxBY-ZB_0dMykZU28668eOr147-CE52n9P7TGWAXyGQP9gqGEq7WQC7MO0cRnvwD9f6KGAlXopNgVlhdWmNJzdKsQAalH-ZJimC5mW4JbouSKtuAlnjIXwUbVcFKtkQPJjDzoMSLDrcb61IWwgDtEPe02b7Zrh15wMmkd1KaxOc5hgo1qRLw3tXI7NUJ10Tk-T8Lxqhsuu7XUmxmP_Mgj9MfJjJjkx8xp6-9Is7bE
 Content-Type: application/json
 
 {
-"name": "High-Speed Printing",
-"description": "Bulk A4 printing for business documents",
-"price": 0.15,
+"firstName": "Jane",
+"lastName": "Manager",
+"email": "jane@codehive.com",
+"role": "Admin"
+}
+
+### Register a new Admin User
+POST https://localhost:7250/register
+Content-Type: application/json
+
+{
+  "email": "staff@codehive.com",
+  "password": "Password123!"
+}
+
+### The product
+POST https://localhost:7250/api/services
+Authorization: Bearer CfDJ8JSGQ0D973hAhmmfQIwPnZzxnCraLmjCaZ0M6QKedMCGf6Dptcka4-6f3XaBXGzF_VFMyzXubPzY_5YfsoL2oi1sYixz_uI5JFHA9WMuWsZ2T59cA4sg6svcWGCdP2FY2p0_8e4Y_ZWh5BubfN4JYOfJLzFzZYHgWrjlX-T7ypYDy7yA9BHQuF3TZUMpicpCWG2eMreZeXFu_-JXDpUA1TYrd2hNI5gZ4qh9Z3LHGxA-O904TC4Inw0PMmb_DQiRPDuHgpOkYvWrqQjSMLav-02hSn3SsVrgzvq4VAIKY2wyp8hBgyckXVwdCWIr3PIHVl3yA6dO8_E6nwBGFv43z94UZaZgX-Ob4TNhGrTdTnNHsj7wCx7Nbs8Z6I87iFo51rCLct89gXqrESa310gZ9VuQ3wfOUwsSc5mQM8xbOtVu4-VXwGGpECSuHVwXnRaVNpV0sE3MLz3tZV8kskPYxXbMadJt--nO8MizEKUKcOCdx8CxBY-ZB_0dMykZU28668eOr147-CE52n9P7TGWAXyGQP9gqGEq7WQC7MO0cRnvwD9f6KGAlXopNgVlhdWmNJzdKsQAalH-ZJimC5mW4JbouSKtuAlnjIXwUbVcFKtkQPJjDzoMSLDrcb61IWwgDtEPe02b7Zrh15wMmkd1KaxOc5hgo1qRLw3tXI7NUJ10Tk-T8Lxqhsuu7XUmxmP_Mgj9MfJjJjkx8xp6-9Is7bE
+Content-Type: application/json
+
+{
+"name": "Hive-HQ Premium Suite",
+"description": "Private office space with full amenities",
+"price": 150.00,
 "isAvailable": true
+}
+
+### The sale
+POST https://localhost:7250/api/orders
+Authorization: Bearer CfDJ8JSGQ0D973hAhmmfQIwPnZzxnCraLmjCaZ0M6QKedMCGf6Dptcka4-6f3XaBXGzF_VFMyzXubPzY_5YfsoL2oi1sYixz_uI5JFHA9WMuWsZ2T59cA4sg6svcWGCdP2FY2p0_8e4Y_ZWh5BubfN4JYOfJLzFzZYHgWrjlX-T7ypYDy7yA9BHQuF3TZUMpicpCWG2eMreZeXFu_-JXDpUA1TYrd2hNI5gZ4qh9Z3LHGxA-O904TC4Inw0PMmb_DQiRPDuHgpOkYvWrqQjSMLav-02hSn3SsVrgzvq4VAIKY2wyp8hBgyckXVwdCWIr3PIHVl3yA6dO8_E6nwBGFv43z94UZaZgX-Ob4TNhGrTdTnNHsj7wCx7Nbs8Z6I87iFo51rCLct89gXqrESa310gZ9VuQ3wfOUwsSc5mQM8xbOtVu4-VXwGGpECSuHVwXnRaVNpV0sE3MLz3tZV8kskPYxXbMadJt--nO8MizEKUKcOCdx8CxBY-ZB_0dMykZU28668eOr147-CE52n9P7TGWAXyGQP9gqGEq7WQC7MO0cRnvwD9f6KGAlXopNgVlhdWmNJzdKsQAalH-ZJimC5mW4JbouSKtuAlnjIXwUbVcFKtkQPJjDzoMSLDrcb61IWwgDtEPe02b7Zrh15wMmkd1KaxOc5hgo1qRLw3tXI7NUJ10Tk-T8Lxqhsuu7XUmxmP_Mgj9MfJjJjkx8xp6-9Is7bE
+Content-Type: application/json
+
+{
+"staffId": "019b9a19-bb45-7ed8-93e2-7349a8d66535",
+"businessServiceId": "019b9a1c-49b6-71d4-ae4f-0c4d055711b0",
+"customerName": "John Doe",
+"quantity": 1,
+"totalPrice": 150.00
 }
