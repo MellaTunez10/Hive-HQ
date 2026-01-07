@@ -8,6 +8,7 @@
 /home/tunez/projects/Hive-HQ/src/HiveHQ.Application/obj/Debug/net10.0/HiveHQ.Application.AssemblyInfoInputs.cache
 /home/tunez/projects/Hive-HQ/src/HiveHQ.Application/obj/Debug/net10.0/HiveHQ.Application.AssemblyInfo.cs
 /home/tunez/projects/Hive-HQ/src/HiveHQ.Application/obj/Debug/net10.0/HiveHQ.Application.csproj.CoreCompileInputs.cache
+/home/tunez/projects/Hive-HQ/src/HiveHQ.Application/obj/Debug/net10.0/HiveHQ.Application.sourcelink.json
 /home/tunez/projects/Hive-HQ/src/HiveHQ.Application/obj/Debug/net10.0/HiveHQ.A.BF623ADA.Up2Date
 /home/tunez/projects/Hive-HQ/src/HiveHQ.Application/obj/Debug/net10.0/HiveHQ.Application.dll
 /home/tunez/projects/Hive-HQ/src/HiveHQ.Application/obj/Debug/net10.0/refint/HiveHQ.Application.dll

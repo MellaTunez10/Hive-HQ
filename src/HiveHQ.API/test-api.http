@@ -1,0 +1,24 @@
+### Get all services
+GET https://localhost:7250/api/Services
+
+### Create a new service
+POST https://localhost:7250/api/Services
+Content-Type: application/json
+
+{
+  "name": "Graphic Design",
+  "description": "Logo and branding services",
+  "price": 150.00,
+  "isAvailable": true
+}
+
+### Separator is required above!
+POST https://localhost:7250/api/services
+Content-Type: application/json
+
+{
+"name": "High-Speed Printing",
+"description": "Bulk A4 printing for business documents",
+"price": 0.15,
+"isAvailable": true
+}

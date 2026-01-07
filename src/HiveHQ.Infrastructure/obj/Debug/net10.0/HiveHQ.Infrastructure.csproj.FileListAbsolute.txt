@@ -1,8 +1,3 @@
-/home/tunez/projects/Hive-HQ/src/HiveHQ.Infrastructure/obj/Debug/net10.0/HiveHQ.Infrastructure.csproj.AssemblyReference.cache
-/home/tunez/projects/Hive-HQ/src/HiveHQ.Infrastructure/obj/Debug/net10.0/HiveHQ.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
-/home/tunez/projects/Hive-HQ/src/HiveHQ.Infrastructure/obj/Debug/net10.0/HiveHQ.Infrastructure.AssemblyInfoInputs.cache
-/home/tunez/projects/Hive-HQ/src/HiveHQ.Infrastructure/obj/Debug/net10.0/HiveHQ.Infrastructure.AssemblyInfo.cs
-/home/tunez/projects/Hive-HQ/src/HiveHQ.Infrastructure/obj/Debug/net10.0/HiveHQ.Infrastructure.csproj.CoreCompileInputs.cache
 /home/tunez/projects/Hive-HQ/src/HiveHQ.Infrastructure/bin/Debug/net10.0/BuildHost-net472/Microsoft.Build.Locator.dll
 /home/tunez/projects/Hive-HQ/src/HiveHQ.Infrastructure/bin/Debug/net10.0/BuildHost-net472/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.exe
 /home/tunez/projects/Hive-HQ/src/HiveHQ.Infrastructure/bin/Debug/net10.0/BuildHost-net472/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.exe.config
@@ -57,6 +52,12 @@
 /home/tunez/projects/Hive-HQ/src/HiveHQ.Infrastructure/bin/Debug/net10.0/HiveHQ.Domain.dll
 /home/tunez/projects/Hive-HQ/src/HiveHQ.Infrastructure/bin/Debug/net10.0/HiveHQ.Application.pdb
 /home/tunez/projects/Hive-HQ/src/HiveHQ.Infrastructure/bin/Debug/net10.0/HiveHQ.Domain.pdb
+/home/tunez/projects/Hive-HQ/src/HiveHQ.Infrastructure/obj/Debug/net10.0/HiveHQ.Infrastructure.csproj.AssemblyReference.cache
+/home/tunez/projects/Hive-HQ/src/HiveHQ.Infrastructure/obj/Debug/net10.0/HiveHQ.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+/home/tunez/projects/Hive-HQ/src/HiveHQ.Infrastructure/obj/Debug/net10.0/HiveHQ.Infrastructure.AssemblyInfoInputs.cache
+/home/tunez/projects/Hive-HQ/src/HiveHQ.Infrastructure/obj/Debug/net10.0/HiveHQ.Infrastructure.AssemblyInfo.cs
+/home/tunez/projects/Hive-HQ/src/HiveHQ.Infrastructure/obj/Debug/net10.0/HiveHQ.Infrastructure.csproj.CoreCompileInputs.cache
+/home/tunez/projects/Hive-HQ/src/HiveHQ.Infrastructure/obj/Debug/net10.0/HiveHQ.Infrastructure.sourcelink.json
 /home/tunez/projects/Hive-HQ/src/HiveHQ.Infrastructure/obj/Debug/net10.0/HiveHQ.I.81232920.Up2Date
 /home/tunez/projects/Hive-HQ/src/HiveHQ.Infrastructure/obj/Debug/net10.0/HiveHQ.Infrastructure.dll
 /home/tunez/projects/Hive-HQ/src/HiveHQ.Infrastructure/obj/Debug/net10.0/refint/HiveHQ.Infrastructure.dll
