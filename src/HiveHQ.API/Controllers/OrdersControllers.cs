@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HiveHQ.API.Controllers;
 
-[Authorize]
+[Authorize(Roles = "Admin,Staff")] // Both roles can place orders
 [ApiController]
 [Route("api/[controller]")]
 public class OrdersController : ControllerBase

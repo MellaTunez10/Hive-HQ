@@ -18,6 +18,7 @@ builder.Services.AddControllers();
 
 // Setup Identity to use our Postgres DB
 builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddAuthorization();
@@ -56,15 +57,30 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-app.MapIdentityApi<IdentityUser>(); // This creates /register and /login endpoints automatically!
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapIdentityApi<IdentityUser>(); // This creates /register and /login endpoints automatically!
 
 app.MapControllers();
 
 // --- 3. ENDPOINTS ---
 // We will replace the weather forecast with Hive-HQ endpoints soon!
 app.MapGet("/", () => "Hive-HQ API is Running...");
+
+// --- 4. DATA SEEDING ---
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var roles = new[] { "Admin", "Staff" };
+
+    foreach (var role in roles)
+    {
+        if (!await roleManager.RoleExistsAsync(role))
+        {
+            await roleManager.CreateAsync(new IdentityRole(role));
+        }
+    }
+}
 
 app.Run();

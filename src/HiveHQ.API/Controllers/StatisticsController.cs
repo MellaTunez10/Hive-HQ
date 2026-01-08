@@ -5,7 +5,7 @@ using HiveHQ.Domain.Entities;
 using HiveHQ.Domain.DTOs;
 namespace HiveHQ.API.Controllers;
 
-[Authorize]
+[Authorize(Roles = "Admin")] // Only Admins can access these stats
 [ApiController]
 [Route("api/[controller]")]
 public class StatisticsController : ControllerBase
