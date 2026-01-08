@@ -1,5 +1,6 @@
 using HiveHQ.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace HiveHQ.Infrastructure.Persistence;
 
@@ -28,4 +29,13 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     public async Task AddAsync(T entity) => await _context.Set<T>().AddAsync(entity);
 
     public async Task<bool> SaveChangesAsync() => await _context.SaveChangesAsync() > 0;
+
+    public async Task<int> CountAsync(Expression<Func<T, bool>>? predicate = null)
+    {
+        if (predicate != null)
+        {
+            return await _context.Set<T>().CountAsync(predicate);
+        }
+        return await _context.Set<T>().CountAsync();
+    }
 }

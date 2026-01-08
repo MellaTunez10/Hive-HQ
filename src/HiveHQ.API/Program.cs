@@ -5,6 +5,7 @@ using FluentValidation;
 using HiveHQ.Application.Validators;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using HiveHQ.Application.Mappings;
+using HiveHQ.Infrastructure.Persistence.Repositories;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,7 +25,6 @@ builder.Services.AddAuthorization();
 // Register the Database Context for PostgreSQL
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 // Register all validators from the Application assembly
 builder.Services.AddValidatorsFromAssemblyContaining<BusinessServiceValidator>();
@@ -34,6 +34,9 @@ builder.Services.AddFluentValidationAutoValidation();
 
 // Register the Generic Repository
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+// Register the specific Order repository
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 //Register AutoMapper
 builder.Services.AddAutoMapper(cfg =>

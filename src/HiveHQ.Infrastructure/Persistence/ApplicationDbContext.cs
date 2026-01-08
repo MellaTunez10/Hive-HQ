@@ -11,7 +11,7 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options) { }
 
-    public DbSet<BusinessService> Services { get; set; }
+    public DbSet<BusinessService> BusinessServices { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<Staff> StaffMembers { get; set; }
     public DbSet<InventoryItem> Inventory { get; set; }

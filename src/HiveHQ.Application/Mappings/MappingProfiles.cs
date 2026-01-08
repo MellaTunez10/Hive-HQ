@@ -1,6 +1,7 @@
 using AutoMapper;
 using HiveHQ.Application.DTOs;
 using HiveHQ.Domain.Entities;
+using HiveHQ.Domain.DTOs;
 
 namespace HiveHQ.Application.Mappings;
 
@@ -12,7 +13,7 @@ public class MappingProfiles : Profile
         CreateMap<BusinessService, ServiceDto>().ReverseMap();
 
         // DTO -> Entity (For creating new services)
-        CreateMap<ServiceDto, BusinessService>();
+        CreateMap<TopServiceDto, BusinessService>();
 
         // Staff mappings
         CreateMap<Staff, StaffDto>().ReverseMap();

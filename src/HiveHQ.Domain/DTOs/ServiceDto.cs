@@ -1,4 +1,4 @@
-namespace HiveHQ.Application.DTOs;
+namespace HiveHQ.Domain.DTOs;
 
 public class ServiceDto
 {
@@ -8,4 +8,3 @@ public class ServiceDto
     public decimal Price { get; set; }
     public bool IsAvailable { get; set; }
 }
-
