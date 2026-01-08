@@ -42,4 +42,25 @@ public class StatisticsController : ControllerBase
 
         return Ok(stats);
     }
+    [HttpGet("daily-summary")]
+    public async Task<ActionResult<DashboardStatsDto>> GetDailySummary()
+    {
+        // Define the boundaries for today
+        var todayStart = DateTime.UtcNow.Date;
+        var todayEnd = todayStart.AddDays(1).AddTicks(-1);
+
+        var stats = new DashboardStatsDto
+        {
+            TotalRevenue = await _orderRepo.GetTotalRevenueAsync(todayStart, todayEnd),
+            TotalOrders = await _orderRepo.CountAsync(o =>
+                o.CreatedAt >= todayStart && o.CreatedAt <= todayEnd),
+
+            // Low stock is always "current" status, so no date filter needed
+            LowStockItemsCount = await _inventoryRepo.CountAsync(i => i.QuantityInStock <= i.ReorderLevel),
+
+            TopServices = await _orderRepo.GetTopServicesAsync(5, todayStart, todayEnd)
+        };
+
+        return Ok(stats);
+    }
 }

@@ -23,6 +23,8 @@ public class MappingProfiles : Profile
 
         // Order mappings
         CreateMap<Order, OrderDto>().ReverseMap();
+
+        CreateMap<OrderCreateDto, Order>().ReverseMap();
     }
 }
 

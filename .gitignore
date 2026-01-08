@@ -1,4 +1,21 @@
+# .NET Core / Visual Studio / Rider
+[Bb]in/
+[Oo]bj/
+*.swp
+*.user
+*.userosscache
+*.sln.docstates
+
+# Database / Secrets
 /src/HiveHQ.API/appsettings.json
+*.db
+*.db-shm
+*.db-wal
+
 # JetBrains Rider / IntelliJ settings
 .idea/
 *.sln.iml
+
+# OS generated files
+.DS_Store
+Thumbs.db

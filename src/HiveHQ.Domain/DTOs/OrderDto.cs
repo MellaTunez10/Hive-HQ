@@ -1,4 +1,4 @@
-namespace HiveHQ.Application.DTOs;
+namespace HiveHQ.Domain.DTOs;
 
 public class OrderDto
 {

@@ -1,5 +1,5 @@
 using AutoMapper;
-using HiveHQ.Application.DTOs;
+using HiveHQ.Domain.DTOs;
 using HiveHQ.Domain.Entities;
 using HiveHQ.Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -31,40 +31,37 @@ public class OrdersController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<OrderDto>> CreateOrder(OrderDto orderDto)
+    public async Task<ActionResult<OrderDto>> CreateOrder(OrderCreateDto orderDto)
     {
-        // 1. Get the service
+        // 1. Get the Service (to get the official Price)
         var service = await _serviceRepo.GetByIdAsync(orderDto.BusinessServiceId);
+        if (service == null) return NotFound("Service not found");
 
-        if (service == null) return BadRequest("Service not found");
-        Console.WriteLine($"Service found: {service.Name}, InventoryLink: {service.InventoryItemId}");
-        // 2. Handle Inventory
+        // 2. The Inventory Guardrail
         if (service.InventoryItemId.HasValue)
         {
-            var inventoryItem = await _inventoryRepo.GetByIdAsync(service.InventoryItemId.Value);
-            if (inventoryItem != null)
+            var item = await _inventoryRepo.GetByIdAsync(service.InventoryItemId.Value);
+            if (item == null || item.QuantityInStock <= 0)
             {
-                if (inventoryItem.QuantityInStock < orderDto.Quantity)
-                {
-                    string itemName = inventoryItem.Name; // Extract to variable to fix ambiguity
-                    return BadRequest($"Not enough stock for {itemName}");
-                }
-                Console.WriteLine($"SUBTRACTING: {orderDto.Quantity} from {inventoryItem.Name}");
-                inventoryItem.QuantityInStock -= orderDto.Quantity;
-                _inventoryRepo.Update(inventoryItem);
-                // We don't save yet; we wait for the order save to do both at once
+                return BadRequest($"Item '{item?.Name}' is out of stock.");
             }
+
+            // Deduct stock
+            item.QuantityInStock--;
+            _inventoryRepo.Update(item);
         }
 
-        // 3. Map and Save Order
+        // 3. Map DTO to Entity
         var order = _mapper.Map<Order>(orderDto);
+
+        // 4. Force business rules
+        order.TotalPrice = service.Price; // The user can't choose their own price
+        order.CreatedAt = DateTime.UtcNow;
+
         await _orderRepo.AddAsync(order);
+        await _orderRepo.SaveChangesAsync(); // Saves both Order and Inventory update
 
-        // This saves BOTH the inventory reduction and the new order in one transaction
-        await _orderRepo.SaveChangesAsync();
-
-        var result = _mapper.Map<OrderDto>(order);
-        return CreatedAtAction(nameof(GetOrder), new { id = result.Id }, result);
+        return Ok(_mapper.Map<OrderDto>(order));
     }
 
      [HttpGet("{id}")]
