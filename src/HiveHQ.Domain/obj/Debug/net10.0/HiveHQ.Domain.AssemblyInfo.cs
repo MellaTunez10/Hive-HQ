@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HiveHQ.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e2adc2c6261998d50724b1311c0055de499b5777")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0878694779f242f62784bcdaed234dd3bb34eec1")]
 [assembly: System.Reflection.AssemblyProductAttribute("HiveHQ.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HiveHQ.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

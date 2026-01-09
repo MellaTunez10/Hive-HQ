@@ -5,4 +5,7 @@
     <Project Path="src/HiveHQ.Domain/HiveHQ.Domain.csproj" />
     <Project Path="src/HiveHQ.Infrastructure/HiveHQ.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/HiveHQ.Tests/HiveHQ.Tests.csproj" />
+  </Folder>
 </Solution>

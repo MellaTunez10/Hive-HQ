@@ -93,6 +93,9 @@
 /home/tunez/projects/Hive-HQ/src/HiveHQ.API/bin/Debug/net10.0/SharpGrip.FluentValidation.AutoValidation.Mvc.dll
 /home/tunez/projects/Hive-HQ/src/HiveHQ.API/bin/Debug/net10.0/SharpGrip.FluentValidation.AutoValidation.Shared.dll
 /home/tunez/projects/Hive-HQ/src/HiveHQ.API/bin/Debug/net10.0/StackExchange.Redis.dll
+/home/tunez/projects/Hive-HQ/src/HiveHQ.API/bin/Debug/net10.0/Swashbuckle.AspNetCore.Swagger.dll
+/home/tunez/projects/Hive-HQ/src/HiveHQ.API/bin/Debug/net10.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+/home/tunez/projects/Hive-HQ/src/HiveHQ.API/bin/Debug/net10.0/Swashbuckle.AspNetCore.SwaggerUI.dll
 /home/tunez/projects/Hive-HQ/src/HiveHQ.API/bin/Debug/net10.0/System.CodeDom.dll
 /home/tunez/projects/Hive-HQ/src/HiveHQ.API/bin/Debug/net10.0/System.Composition.AttributedModel.dll
 /home/tunez/projects/Hive-HQ/src/HiveHQ.API/bin/Debug/net10.0/System.Composition.Convention.dll

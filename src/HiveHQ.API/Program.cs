@@ -1,103 +1,131 @@
 using HiveHQ.Domain.Interfaces;
 using HiveHQ.Infrastructure.Persistence;
-using Microsoft.EntityFrameworkCore;
-using FluentValidation;
-using HiveHQ.Application.Validators;
-using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
-using HiveHQ.Application.Mappings;
 using HiveHQ.Infrastructure.Persistence.Repositories;
-using Microsoft.AspNetCore.Identity;
 using HiveHQ.Infrastructure.Configuration;
+using HiveHQ.Application.Services;
+using HiveHQ.Application.Validators;
+using HiveHQ.Application.Mappings;
+
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.OpenApi;
+
+using FluentValidation;
+using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
+
 using Hangfire;
 using Hangfire.PostgreSql;
-using HiveHQ.Application.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-// --- 1. SERVICE REGISTRATION ---
-// Register OpenAPI (Swagger replacement in .NET 9)
-builder.Services.AddOpenApi();
+// --------------------
+// SERVICE REGISTRATION
+// --------------------
 
 builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
 
-// Setup Identity to use our Postgres DB
+// Identity
 builder.Services.AddIdentityApiEndpoints<IdentityUser>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddAuthorization();
-
-// Register the Database Context for PostgreSQL
+// Database
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Regsiter Redis Caching
-// 1. Bind the JSON section to the class
+// Redis
 var redisSettings = new RedisSettings();
 builder.Configuration.GetSection(RedisSettings.SectionName).Bind(redisSettings);
 
-// 2. Register with the DI container so you can use it anywhere
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = redisSettings.ConnectionString;
     options.InstanceName = "HiveHQ_";
 });
 
-// Register all validators from the Application assembly
-builder.Services.AddValidatorsFromAssemblyContaining<BusinessServiceValidator>();
-
-// Enable automatic validation (returns 400 Bad Request if validation fails)
-builder.Services.AddFluentValidationAutoValidation();
-
-// Register the Generic Repository
+// Repositories & Services
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-
-// Register the specific Order repository
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
-//Register AutoMapper
-builder.Services.AddAutoMapper(cfg =>
+builder.Services.AddScoped<ReportingService>();
+builder.Services.AddScoped<OrderCleanupService>();
+builder.Services.AddScoped<InventoryAlertService>();
+
+// Validation & Mapping
+builder.Services.AddValidatorsFromAssemblyContaining<BusinessServiceValidator>();
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfiles>());
+
+// Hangfire
+builder.Services.AddHangfire(config =>
+    config.SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+          .UseSimpleAssemblyNameTypeSerializer()
+          .UseRecommendedSerializerSettings()
+          .UsePostgreSqlStorage(options =>
+              options.UseNpgsqlConnection(
+                  builder.Configuration.GetConnectionString("DefaultConnection"))));
+// SwaggerGen
+builder.Services.AddSwaggerGen(options =>
 {
-    cfg.AddProfile<MappingProfiles>();
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Hive-HQ API",
+        Version = "v1",
+        Description = "Management system for shared workspaces."
+    });
+
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Enter your JWT token (e.g., Bearer {token})."
+    });
+
+    // Correct for v10+: delegate + OpenApiSecuritySchemeReference + List<string> for scopes
+    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecuritySchemeReference("Bearer", document), // References the scheme above
+            new List<string>() // Empty list = no scopes required (standard for JWT Bearer)
+        }
+    });
 });
 
-// Register Hangfire
-builder.Services.AddHangfire(config => config
-    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
-    .UseSimpleAssemblyNameTypeSerializer()
-    .UseRecommendedSerializerSettings()
-    .UsePostgreSqlStorage(options =>
-        options.UseNpgsqlConnection(builder.Configuration.GetConnectionString("DefaultConnection"))));
 
-// Add the Hangfire RPC server (this is what actually runs the jobs)
-builder.Services.AddHangfireServer();
-
+// --------------------
+// BUILD APP
+// --------------------
 
 var app = builder.Build();
 
-// --- 2. MIDDLEWARE PIPELINE ---
-// Enable the API documentation in development mode
+// --------------------
+// MIDDLEWARE
+// --------------------
+
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
+
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseAuthorization(); // Hangfire needs to come after Auth if you want to secure it
 
-app.MapHangfireDashboard(); // This creates the /hangfire URL
-app.MapIdentityApi<IdentityUser>(); // This creates /register and /login endpoints automatically!
-
+app.MapHangfireDashboard();
+app.MapIdentityApi<IdentityUser>();
 app.MapControllers();
 
-// --- 3. ENDPOINTS ---
-// We will replace the weather forecast with Hive-HQ endpoints soon!
-app.MapGet("/", () => "Hive-HQ API is Running...");
+// --------------------
+// STARTUP TASKS
+// --------------------
 
-// --- 4. DATA SEEDING ---
 using (var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
@@ -105,33 +133,27 @@ using (var scope = app.Services.CreateScope())
 
     foreach (var role in roles)
     {
-        if (!await roleManager.RoleExistsAsync(role))
+        if (!roleManager.RoleExistsAsync(role).GetAwaiter().GetResult())
         {
-            await roleManager.CreateAsync(new IdentityRole(role));
+            roleManager.CreateAsync(new IdentityRole(role)).GetAwaiter().GetResult();
         }
     }
-}
-// Schedule recurring jobs
-using (var scope = app.Services.CreateScope())
-{
+
     var recurringJob = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
 
-    // 1. Midnight Cleanup (Runs at 00:00 every day)
     recurringJob.AddOrUpdate<OrderCleanupService>(
-        "midnight-cleanup", 
-        s => s.ClearStaleOrders(), 
+        "midnight-cleanup",
+        s => s.ClearStaleOrders(),
         Cron.Daily);
 
-    // 2. Daily Revenue Report (Runs at 23:59 every day)
     recurringJob.AddOrUpdate<ReportingService>(
-        "daily-revenue-report", 
-        s => s.GenerateEndOfDayReport(), 
-        "59 23 * * *"); // Standard Cron for 11:59 PM
+        "daily-revenue-report",
+        s => s.GenerateEndOfDayReport(),
+        "59 23 * * *");
 
-    // 3. Hourly Stock Check (Runs at the start of every hour)
     recurringJob.AddOrUpdate<InventoryAlertService>(
-        "hourly-stock-check", 
-        s => s.CheckStockLevels(), 
+        "hourly-stock-check",
+        s => s.CheckStockLevels(),
         Cron.Hourly);
 }
 

@@ -12,6 +12,7 @@ namespace HiveHQ.API.Controllers;
 [Authorize(Roles = "Admin")] // Only Admins can access these stats
 [ApiController]
 [Route("api/[controller]")]
+[Tags("Management & Analytics")] // This groups the endpoints in the UI
 public class StatisticsController : ControllerBase
 {
     private readonly IOrderRepository _orderRepo;
@@ -49,7 +50,7 @@ public class StatisticsController : ControllerBase
 
         return Ok(stats);
     }
-    [AllowAnonymous]
+
     [HttpGet("daily-summary")]
     public async Task<ActionResult<DashboardStatsDto>> GetDailySummary()
     {

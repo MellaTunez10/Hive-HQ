@@ -6,14 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HiveHQ.Infrastructure.Persistence.Repositories;
 
-public class OrderRepository : GenericRepository<Order>, IOrderRepository
+public class OrderRepository(ApplicationDbContext context) : GenericRepository<Order>(context), IOrderRepository
 {
-    private readonly ApplicationDbContext _context;
 
-    public OrderRepository(ApplicationDbContext context) : base(context)
-    {
-        _context = context;
-    }
 
     public async Task<decimal> GetTotalRevenueAsync(
         DateTime? start,
