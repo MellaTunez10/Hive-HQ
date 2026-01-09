@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HiveHQ.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b5adefd41e04e194ddb0fe93c3310b389453f469")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e2adc2c6261998d50724b1311c0055de499b5777")]
 [assembly: System.Reflection.AssemblyProductAttribute("HiveHQ.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HiveHQ.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

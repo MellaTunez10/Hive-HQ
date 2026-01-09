@@ -15,6 +15,7 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     public DbSet<Order> Orders { get; set; }
     public DbSet<Staff> StaffMembers { get; set; }
     public DbSet<InventoryItem> Inventory { get; set; }
+    public DbSet<DailyReport> DailyReports { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

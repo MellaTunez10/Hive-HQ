@@ -38,4 +38,11 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         }
         return await _context.Set<T>().CountAsync();
     }
+    public async Task<IReadOnlyList<T>> GetListAsync(Expression<Func<T, bool>> predicate)
+    {
+        return await _context.Set<T>()
+            .Where(predicate)
+            .ToListAsync();
+    }
+
 }

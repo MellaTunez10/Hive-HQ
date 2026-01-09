@@ -5,6 +5,8 @@ namespace HiveHQ.Domain.Interfaces;
 public interface IGenericRepository<T> where T : class
 {
     Task<T?> GetByIdAsync(Guid id);
+    
+    Task<IReadOnlyList<T>> GetListAsync(Expression<Func<T, bool>> predicate);
     Task<IReadOnlyList<T>> GetAllAsync();
     Task AddAsync(T entity);
     void Update(T entity);

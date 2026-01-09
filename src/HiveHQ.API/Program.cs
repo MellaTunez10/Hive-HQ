@@ -7,6 +7,11 @@ using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using HiveHQ.Application.Mappings;
 using HiveHQ.Infrastructure.Persistence.Repositories;
 using Microsoft.AspNetCore.Identity;
+using HiveHQ.Infrastructure.Configuration;
+using Hangfire;
+using Hangfire.PostgreSql;
+using HiveHQ.Application.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +32,18 @@ builder.Services.AddAuthorization();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Regsiter Redis Caching
+// 1. Bind the JSON section to the class
+var redisSettings = new RedisSettings();
+builder.Configuration.GetSection(RedisSettings.SectionName).Bind(redisSettings);
+
+// 2. Register with the DI container so you can use it anywhere
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = redisSettings.ConnectionString;
+    options.InstanceName = "HiveHQ_";
+});
+
 // Register all validators from the Application assembly
 builder.Services.AddValidatorsFromAssemblyContaining<BusinessServiceValidator>();
 
@@ -45,6 +62,16 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.AddProfile<MappingProfiles>();
 });
 
+// Register Hangfire
+builder.Services.AddHangfire(config => config
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UsePostgreSqlStorage(options =>
+        options.UseNpgsqlConnection(builder.Configuration.GetConnectionString("DefaultConnection"))));
+
+// Add the Hangfire RPC server (this is what actually runs the jobs)
+builder.Services.AddHangfireServer();
 
 
 var app = builder.Build();
@@ -59,7 +86,9 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseAuthorization(); // Hangfire needs to come after Auth if you want to secure it
 
+app.MapHangfireDashboard(); // This creates the /hangfire URL
 app.MapIdentityApi<IdentityUser>(); // This creates /register and /login endpoints automatically!
 
 app.MapControllers();
@@ -81,6 +110,29 @@ using (var scope = app.Services.CreateScope())
             await roleManager.CreateAsync(new IdentityRole(role));
         }
     }
+}
+// Schedule recurring jobs
+using (var scope = app.Services.CreateScope())
+{
+    var recurringJob = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
+
+    // 1. Midnight Cleanup (Runs at 00:00 every day)
+    recurringJob.AddOrUpdate<OrderCleanupService>(
+        "midnight-cleanup", 
+        s => s.ClearStaleOrders(), 
+        Cron.Daily);
+
+    // 2. Daily Revenue Report (Runs at 23:59 every day)
+    recurringJob.AddOrUpdate<ReportingService>(
+        "daily-revenue-report", 
+        s => s.GenerateEndOfDayReport(), 
+        "59 23 * * *"); // Standard Cron for 11:59 PM
+
+    // 3. Hourly Stock Check (Runs at the start of every hour)
+    recurringJob.AddOrUpdate<InventoryAlertService>(
+        "hourly-stock-check", 
+        s => s.CheckStockLevels(), 
+        Cron.Hourly);
 }
 
 app.Run();

@@ -1,0 +1,23 @@
+services:
+  # The Database
+  db:
+    image: postgres:latest
+    container_name: hive-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ALoz13..MEllaTUNEZ0910 # Match your appsettings
+      POSTGRES_DB: HiveHQ_Db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # The Cache
+  cache:
+    image: redis:latest
+    container_name: hive-redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:
