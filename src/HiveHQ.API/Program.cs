@@ -96,6 +96,16 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+// 1. Define the policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowNextJs",
+        policy => policy.SetIsOriginAllowed(origin => true) // Allow any origin for dev
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials());
+});
+
 
 // --------------------
 // BUILD APP
@@ -115,11 +125,16 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// 2. Use the policy (Put this BEFORE app.MapControllers)
+app.UseCors("AllowNextJs");
+
 app.UseAuthentication();
 app.UseAuthorization();
 
+
 app.MapHangfireDashboard();
 app.MapIdentityApi<IdentityUser>();
+
 app.MapControllers();
 
 // --------------------
@@ -128,6 +143,15 @@ app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
+    
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<ApplicationDbContext>();
+
+    // 1. Apply Migrations (Fixes the "Relation does not exist" error)
+    await context.Database.MigrateAsync();
+
+    // 2. Seed Data
+    await DbSeeder.SeedData(context);
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
     var roles = new[] { "Admin", "Staff" };
 
@@ -157,4 +181,26 @@ using (var scope = app.Services.CreateScope())
         Cron.Hourly);
 }
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try 
+    {
+        var context = services.GetRequiredService<ApplicationDbContext>();
+        
+        // 1. Ensure the database is created and tables exist
+        Console.WriteLine("Applying Migrations...");
+        await context.Database.MigrateAsync();
+
+        // 2. Run the Seeder
+        Console.WriteLine("Seeding Data...");
+        await DbSeeder.SeedData(context);
+        
+        Console.WriteLine("Database setup complete!");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred during startup: {ex.Message}");
+    }
+}
 app.Run();

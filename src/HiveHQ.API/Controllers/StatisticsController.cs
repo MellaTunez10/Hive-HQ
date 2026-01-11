@@ -52,6 +52,7 @@ public class StatisticsController : ControllerBase
     }
 
     [HttpGet("daily-summary")]
+    [AllowAnonymous]
     public async Task<ActionResult<DashboardStatsDto>> GetDailySummary()
     {
         const string cacheKey = "daily_summary_stats";

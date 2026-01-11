@@ -9,7 +9,7 @@ namespace HiveHQ.API.Controllers;
 
 [Authorize]
 [ApiController]
-[Route("api/[controller]")] // This makes the URL: /api/inventory
+[Route("api/[controller]")]// This makes the URL: /api/inventory
 public class InventoryController : ControllerBase
 {
     private readonly IGenericRepository<InventoryItem> _repo;
@@ -22,6 +22,7 @@ public class InventoryController : ControllerBase
     }
 
     [HttpPost]
+    [AllowAnonymous]
     public async Task<ActionResult<InventoryDto>> CreateItem(InventoryDto dto)
     {
         var item = _mapper.Map<InventoryItem>(dto);
@@ -33,6 +34,7 @@ public class InventoryController : ControllerBase
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<InventoryDto>>> GetAll()
     {
         var items = await _repo.GetAllAsync();

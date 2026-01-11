@@ -1,30 +1,63 @@
-# Hive-HQ Enterprise Management System
+🐝 Hive-HQ | Workspace & Inventory Management System
+Hive-HQ is an enterprise-grade backend system designed for managing shared workspaces and real-time inventory. Built with .NET 10 and Clean Architecture, it demonstrates high-performance patterns like Distributed Caching (Redis) and Background Task Orchestration (Hangfire).
 
-A robust, scalable backend designed to manage business center operations, inventory, and automated billing. Built with **.NET 9** and **PostgreSQL** using **Clean Architecture** principles.
+🚀 Key Technical Features
+Clean Architecture (DDD Principles): Separation of concerns ensuring the business logic (Domain) remains independent of frameworks and databases.
 
-## 🏗️ Technical Architecture
-The project is organized into four distinct layers to ensure maintainability and separation of concerns:
-* **Domain:** Core entities and business rules (POCOs).
-* **Application:** Interfaces, DTOs, and request validation (FluentValidation).
-* **Infrastructure:** Data persistence via Entity Framework Core and PostgreSQL.
-* **API:** RESTful endpoints and middleware configuration.
+Cache-Aside Pattern with Redis: Drastically reduced latency for dashboard statistics by caching high-traffic data.
 
-## 🚀 Current Features
-- [x] **Clean Architecture** project structure.
-- [x] **PostgreSQL Integration** with EF Core Code-First migrations.
-- [x] **Generic Repository Pattern** for decoupled data access.
-- [x] **Automated Validation** using FluentValidation to ensure data integrity.
-- [x] **OpenAPI (Swagger)** documentation for endpoint testing.
+Automated Background Processing: * Midnight Cleanup: Automatically archives stale "Pending" orders.
 
-## 🛠️ Tech Stack
-- **Framework:** .NET 9
-- **Database:** PostgreSQL
-- **ORM:** Entity Framework Core
-- **Validation:** FluentValidation
-- **IDE:** JetBrains Rider
+Low Stock Alerts: Hourly background checks to notify staff of inventory levels.
 
-## 🚦 Getting Started
-1. Clone the repo.
-2. Update `appsettings.json` with your PostgreSQL credentials.
-3. Run `dotnet ef database update` to sync the schema.
-4. Run `dotnet run --project src/HiveHQ.API` to start the server.
+Daily Financial Reports: Aggregates revenue data at EOD for permanent storage.
+
+Strongly-Typed Configuration: Implemented the Options Pattern for secure and manageable infrastructure settings.
+
+Robust Testing: Core business rules are verified with xUnit and Moq to ensure zero regressions.
+
+🛠 Tech Stack
+Backend: ASP.NET Core 10 (Web API)
+
+Database: PostgreSQL
+
+Caching: Redis
+
+Background Jobs: Hangfire
+
+Validation: FluentValidation (Auto-validation middleware)
+
+Documentation: Swagger/OpenAPI with JWT integration
+
+Containerization: Docker & Docker Compose
+
+📁 Project Structure
+Plaintext
+
+src/
+├── HiveHQ.Domain/         # Entities, Interfaces, Logic (Zero Dependencies)
+├── HiveHQ.Application/    # DTOs, Mapping, Validators, Services
+├── HiveHQ.Infrastructure/ # Persistence (EF Core), Redis, Configuration
+└── HiveHQ.API/            # Controllers, Middleware, Program.cs
+tests/
+└── HiveHQ.Tests/          # xUnit & Moq Unit Tests
+
+🚦 Getting Started
+Prerequisites
+.NET 10 SDK
+
+Docker Desktop
+
+1. Spin up the Infrastructure
+   docker-compose up -d
+
+3. Apply Migrations
+   dotnet ef database update --project src/HiveHQ.Infrastructure --startup-project src/HiveHQ.API
+
+4. Run the Application
+   dotnet run --project src/HiveHQ.API
+
+Note: Access the API documentation at https://localhost:7250/swagger
+
+🧪 Running Tests
+   dotnet test

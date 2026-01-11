@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HiveHQ.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0878694779f242f62784bcdaed234dd3bb34eec1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+130e9f58edf2a10fb777f5f980239a4201e40f9f")]
 [assembly: System.Reflection.AssemblyProductAttribute("HiveHQ.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HiveHQ.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
